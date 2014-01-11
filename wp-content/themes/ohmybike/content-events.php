@@ -46,9 +46,10 @@
 				<?php echo $event['name']; ?>
 			</h3>
 			<p class="place" itemprop="location"><?php echo $event['place']; ?></p>
-			<?php if($event['url']): ?>
+			<!--<?php if($event['url']): ?>
 				<a href="<?php echo $event['url']; ?>" title="Buy a ticket for that event">»Tickets«</a>
 			<?php endif; ?>
+			-->
 		</div>
 		<?php $j++; endif; ?>
 		<?php endforeach;?>

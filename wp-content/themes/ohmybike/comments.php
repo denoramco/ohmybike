@@ -33,10 +33,14 @@
 	
 <?php endif; // end have_comments() ?>
 
-<?php if ( comments_open() ): ?>	
- 
+<?php if ( comments_open() ): ?>			
 		<div id="respond">
-	 		<h2 id="leave-reply">Leave a reply</h2>			 
+		<?php preg_match( '#replytocom=?([0-9]{1,})#' , $_SERVER['REQUEST_URI'] , $comment_id , PREG_OFFSET_CAPTURE); ?>
+		<?php if(!empty($comment_id)): ?>		
+			<h2 id="leave-reply">Leave a reply to <?php comment_author( $comment_id[1][0] ); ?></h2>
+		<?php else: ?>
+	 		<h2 id="leave-reply">Leave a reply to "<?php the_title(); ?>"</h2>
+		<?php endif; ?>
 			<form action="<?php echo get_option('siteurl'); ?>/wp-comments-post.php" method="post" id="commentform">
 				<p>
 					<?php global $guahanAjaxCommentsPlugin; if (isset($guahanAjaxCommentsPlugin)) { $guahanAjaxCommentsPlugin->renderCustomCommentField(); } else { echo '<textarea name="comment" id="comment" cols="50" rows="10" tabindex="4"></textarea>'; } ?>

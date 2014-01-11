@@ -23,6 +23,13 @@
 		}else{
 			$valid = true;
 		}
+		// verify tags
+		if(empty($postTags)){
+			$_SESSION['emptyTags'] = "Add tags to your post.";
+			$valid = false;
+		}else{
+			$valid = true;
+		}
 		
 		// envoi des donnees si verif ok
 		if($valid){
@@ -37,6 +44,7 @@
 			$categories[] = $category;
 			$post_id = wp_insert_post( $post_data );			
 			wp_set_post_categories( $post_id, $categories );
+			wp_set_post_tags( $post_id, $postTags ); // set tags to post
 		}
 		
 		if (!$is_ajax) {

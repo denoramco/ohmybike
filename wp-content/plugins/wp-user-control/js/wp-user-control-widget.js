@@ -77,14 +77,14 @@ function wp_user_control_widget_js( target ) {
 		jQuery( ".tab_container_login, #register_div" ).show();
 	};
 	// hide label when input is focused
-	jQuery("#profil input[type='text']").focus(function() {
+	jQuery("#user_login, #user_pass, #user_signup, #user_email, #user_signup_pass").focus(function() {
 		jQuery(this).prev('label').hide();
 	});
-	jQuery("#profil input[type='text']").focusout(function () {
+	jQuery("#user_login, #user_pass, #user_signup, #user_email, #user_signup_pass").focusout(function () {
 		if(jQuery(this).val() == ''){
 			jQuery(this).prev('label').show();
 		}else{
 			jQuery(this).prev('label').hide();
 		}
-	});
+	});	
 }

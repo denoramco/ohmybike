@@ -218,7 +218,7 @@ function wp_user_control_login_url_filter( $login_url, $redirect ) {
  * @param string $user_mail
  */
 function wp_user_control_mail( $message, $subject, $user_email ) {
-	if ( false == wp_mail( $user_email, sprintf( __( '%s ' . $subject, 'wp-user-control' ), htmlspecialchars_decode( get_option( 'blogname' ), ENT_QUOTES ) ), $message ) ) {
+	if( false == wp_mail( $user_email, sprintf( __( '%s ' . $subject, 'wp-user-control' ), htmlspecialchars_decode( get_option( 'blogname' ), ENT_QUOTES ) ), $message ) ) {
 		$error[] = '<p><span class="registerfail">' . __( 'E-mail could not be sent.', 'wp-user-control' ) . "<br />\n"
 				. __( 'Possible reason: your host may have disabled the mail() function...', 'wp-user-control' ) . '</span></p>';
 	}
@@ -309,6 +309,9 @@ function wp_user_control_output_registration_error( $error ) {
 		case 'email_exists':
 			_e( 'Email already registered. Did you forget your password?', 'wp-user-control' );
 			break;
+		case 'wrong_email':
+			_e( 'The email format is not valid. info@example.com', 'wp-user-control' );
+			break;
 		case 'registration_disabled':
 			_e( 'Sorry, new registrations are not allowed at this time.', 'wp-user-control' );
 			break;
@@ -316,14 +319,14 @@ function wp_user_control_output_registration_error( $error ) {
 			_e( 'You are logged in already. No need to register again!', 'wp-user-control' );
 			break;
 		case 'empty_fields':
-			_e( 'Please enter a valid user name and email address.', 'wp-user-control' );
+			_e( 'Do not leave an empty field.', 'wp-user-control' );
 			break;
-		case 'uppercase':
-			_e( 'User name cannot contain uppercase letters.', 'wp-user-control' );
+		case 'digit':
+			_e( 'Please enter a valid user name. Digits are not allowed', 'wp-user-control' );
 			break;
-		case 'spaces':
-			_e( 'User name cannot contain spaces.', 'wp-user-control' );
-			break;
+		case 'password':
+			_e( 'Please enter a stronger password', 'wp-user-control' );
+			break;	
 		default:
 			_e( 'Registration failed. Unknown error.', 'wp-user-control' );
 			break;
@@ -337,11 +340,11 @@ function wp_user_control_output_registration_error( $error ) {
  * Method to create user message for email notification of password reset or new user creation.
  *
  * @param string $action ('reset' or 'new')
- * @param string $temp_password
+ * @param string $password
  * @param string $url
- * @param string $user_login
+ * @param string $user_signup
  */
-function wp_user_control_user_email_msg( $action, $temp_password, $url, $user_login ) {
+function wp_user_control_user_email_msg( $action, $password, $url, $user_login ) {
 	// create new user email message
 	if ( $action == 'reset' ) {
 		$message = __('Someone has asked to reset the password for the following site and username.', 'wp-user-control' ) . "\r\n\r\n";
@@ -350,9 +353,9 @@ function wp_user_control_user_email_msg( $action, $temp_password, $url, $user_lo
 	}
 	$message .= $url . "\r\n\r\n";	
 	$message .= sprintf( __( 'Username: %s', 'wp-user-control' ), $user_login ) . "\r\n";
-	$message .= sprintf( __( 'Temporary Password: %s', 'wp-user-control' ), $temp_password ) . "\r\n\r\n";
-	$message .= __( 'Please change your password when you login.', 'wp-user-control' ) . "\r\n\r\n";
-	$message .= __( 'OVH Host may take a while to retrieve your data, wait a few minutes until trying to connect' ) . "\r\n\r\n";
+	$message .= sprintf( __( 'Password: %s', 'wp-user-control' ), $password ) . "\r\n\r\n";
+	$message .= __( '<strong>You might wait 2 minutes before login.</strong>', 'wp-user-control' ) . "\r\n\r\n";
+	$message .= __( 'Have fun posting content while logged. Enjoy community.', 'wp-user-control' ) . "\r\n\r\n";
 	return $message;
 } // end function user_email_msg
 
@@ -745,10 +748,11 @@ if ( !class_exists( 'wp_user_control_Widget' ) ) {
 	    								}
 	    								
 										// grab desired user name and email
-										$user_login = ( array_key_exists( 'user_login', $_REQUEST ) ) ? trim( $_REQUEST['user_login'] ) : false;
+										$user_signup = ( array_key_exists( 'user_signup', $_REQUEST ) ) ? trim( $_REQUEST['user_signup'] ) : false;
+										$user_signup_pass = ( array_key_exists( 'user_signup_pass', $_REQUEST ) ) ? trim( $_REQUEST['user_signup_pass'] ) : false;
 										$user_email = ( array_key_exists( 'user_email', $_REQUEST ) ) ? trim( $_REQUEST['user_email'] ) : false;
 										
-										if ( empty( $user_login ) && !empty( $register ) || empty( $user_email ) && !empty( $register ) ) {
+										if ( empty( $user_signup ) && !empty( $register ) || empty( $user_signup_pass ) && !empty( $register ) || empty( $user_email ) && !empty( $register ) ) {
 											$register_error = 'empty_fields';
 											// reset register flag
 											$register = 'false';
@@ -761,51 +765,54 @@ if ( !class_exists( 'wp_user_control_Widget' ) ) {
 										// if registration has actually been submitted, proceed
 										} elseif ( $register ) {
 											// make sure user name is not already registered
-											if ( username_exists( $user_login ) ) {
+											if ( username_exists( $user_signup ) ) {
 												$register_error = 'username_exists';
 												// reset register flag
 												$register = 'false';
 											// make sure user email is not already registered
+											} elseif ( strlen( $user_signup_pass ) < 5 ) {
+												$register_error = 'password';
+												// reset register flag
+												$register = 'false';
+											// check for password
 											} elseif ( email_exists( $user_email ) ) {
 												$register_error = 'email_exists';
 												// reset register flag
 												$register = 'false';
 											// check for uppercase
-											} elseif ( preg_match( "/[A-Z]/", $user_login ) ) {
-												$register_error = 'uppercase';
+											} elseif ( !filter_var( $user_email , FILTER_VALIDATE_EMAIL ) ) {
+												$register_error = 'wrong_email';
+												// reset register flag
+												$register = 'false';
+											// check for email format
+											} elseif ( preg_match( "(\d)", $user_signup ) ) {
+												$register_error = 'digit';
 												// reset register flag
 												$register = 'false';
 											// check for spaces
-											} elseif ( strpos( $user_login, " " ) !== false ) {
-												$register_error = 'spaces';
-												// reset register flag
-												$register = 'false';
-											// otherwise proceed with registration checks
 											} else {
 												// make sure user registration is enabled
 												if ( !$registrations_disabled ) {
 													// set flag for successful registration
 													$register = 'true';
-													// generate temp password
-													$temp_password = wp_PluginUtilities::generatePassword();
 													// check for WPMS
 													if ( is_multisite() ) {
 														// register user for WPMS
-														wpmu_create_user( $user_login, $temp_password, $user_email );
+														wpmu_create_user( $user_signup, $user_signup_pass, $user_email );
 														// get user info after it has been created
-														if ( $user = get_user_by( 'login', $user_login ) ) {
-															// add user to current blog as subscriber
-															add_user_to_blog( $blog_id, $user->id, 'subscriber' );
+														if ( $user = get_user_by( 'login', $user_signup ) ) {
+															// add user to current blog as contributor
+															add_user_to_blog( $blog_id, $user->id, 'contributor' );
 														}
 													// otherwise this is a standard WP install
 													} else {
 														// register user for WP standard
-														wp_create_user( $user_login, $temp_password, $user_email );
+														wp_create_user( $user_signup, $user_signup_pass, $user_email );
 													}
 													
 													// send user notification email
-													$message = wp_user_control_user_email_msg( 'new', $temp_password, home_url(), $user_login );
-													// send new user registration email meassage
+													$message = wp_user_control_user_email_msg( 'new', $user_signup_pass , home_url(), $user_signup );
+													// send new user registration email message
 													wp_user_control_mail( $message, 'New User Registration', $user_email );
 														
 												// otherwise, we're done - return message to WP User Control widget
@@ -820,7 +827,7 @@ if ( !class_exists( 'wp_user_control_Widget' ) ) {
 	    								// if registration attempt returned success
 	    								if ( $register == 'true' ) { 
 	    									?>
-	    									<p class="check"><?php _e( 'Check your email for the password and then return to log in.', 'wp-user-control' ); ?></p> <?php 
+	    									<p class="check"><?php _e( 'You can login right now. An email has been sent with your info', 'wp-user-control' ); ?></p> <?php 
 										// if registration request failed, process error
 										} elseif ( $register == 'false' ) {
 											$registerError = $register_error;
@@ -832,26 +839,27 @@ if ( !class_exists( 'wp_user_control_Widget' ) ) {
 	    								}
 	    								
 	    								?>
-										<p class="advice">
-											<span>User name cannot contain uppercase letters.</span>
-											<span>User name cannot contain spaces.</span>	
-										</p>
 	    								<form method="post" action="<?php echo wp_user_control_cleanURI( $_SERVER['REQUEST_URI'] ); ?>?register=true" class="wp-user-form">
 	    									<fieldset class="username">
 												<span class="icon-username"></span>
 	    										<label for="user_signup"><?php _e( 'username', 'wp-user-control' ); ?></label>
-	    										<input type="text" <?php if ( $registrations_disabled ) { ?> disabled="disabled" <?php } ?> name="user_login" value="<?php 
+	    										<input type="text" <?php if ( $registrations_disabled ) { ?> disabled="disabled" <?php } ?> name="user_signup" value="<?php 
 	    											echo stripslashes( $user_signup ); ?>" id="user_signup" tabindex="101" />
 	    									</fieldset>
+											<fieldset class="signup_password">
+												<span class="icon-login"></span>
+	    										<label for="user_signup_pass"><?php _e( 'password', 'wp-user-control' ); ?></label>
+	    										<input type="password" name="user_signup_pass" value="" id="user_signup_pass" tabindex="102" />
+											</fieldset>
 	    									<fieldset class="useremail">
 												<span class="icon-mail"></span>
 	    										<label for="user_email"><?php _e( 'email', 'wp-user-control' ); ?></label>
 	    										<input type="text" <?php if ( $registrations_disabled ) { ?> disabled="disabled" <?php } ?> name="user_email" value="<?php 
-	    											echo stripslashes( $user_email ); ?>" id="user_email" tabindex="102" />
+	    											echo stripslashes( $user_email ); ?>" id="user_email" tabindex="103" />
 	    									</fieldset>
 	    									<fieldset class="login_fields">
 	    										<?php do_action( 'register_form' ); ?>
-	    										<input type="submit" name="user-submit" value="<?php echo $registerButtonLabel; ?>" <?php if ( $registrations_disabled ) { ?> disabled="disabled" <?php } ?> class="user-submit" tabindex="103" />
+	    										<input type="submit" name="user-submit" value="<?php echo $registerButtonLabel; ?>" <?php if ( $registrations_disabled ) { ?> disabled="disabled" <?php } ?> class="user-submit" tabindex="104" />
 	    										<input type="hidden" name="redirect_to" value="<?php echo wp_user_control_cleanURI( $_SERVER['REQUEST_URI'] ); ?>?register=true" />
 	    										<input type="hidden" name="user-cookie" value="1" />
 	    									</fieldset>

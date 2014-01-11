@@ -88,17 +88,25 @@
 			<?php the_content(); ?>
 			<div>
 				<p class="post-author">
-					<span><?php echo get_the_date('d/m/Y @ G:i'); ?></span>
+					<span><?php echo get_the_date('d/m/Y'); ?></span>
+					<span class="icon-clock hour"><?php echo get_the_date('G:i'); ?></span>
 					<span>by</span>
-					<span><?php echo get_the_author(); ?></span>				
+					<span class="the-author"><?php echo get_the_author(); ?></span>				
 				</p>
 				<?php if( function_exists('zilla_likes') ) zilla_likes(); ?>
 			</div>			
 		</div>
 		<?php endif; ?>
 	</article>
-	<?php 
-		comments_template();?>
+	<?php
+		if ( is_user_logged_in() ){
+			comments_template();
+		}else{
+	?>
+		<p class="must-log">You must be logged in to add comment or any kind of content.</p>
+	<?php
+		}
+	?>
 	</div>
 		<?php 
 			$post_type = get_post_type();
@@ -182,18 +190,6 @@
 							?>
 						</a>
 					</h5>
-					<p class="content">
-						<?php 
-							$post_content = get_the_content(); 
-							if(strlen($post_content) > 80){
-								$result = substr($post_content, 0, 80);
-								$result .= "...";
-							}else{
-								$result = $post_content;
-							}
-							echo $result;
-						?>
-					</p>
 				</div>
 			<?php endif; ?>
 		<?php endwhile; ?>

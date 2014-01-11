@@ -10,11 +10,12 @@
 		
 		$(".spot").show();
 		$(".shop").show();
-		$(".image").show();
+		$(".image").show();		
 		
-		$( ".country-name" ).not( ".country-name." + name_country ).parents(".spot").hide();
-		$( ".country-name" ).not( ".country-name." + name_country ).parents(".shop").hide();
-		$( ".image" ).not( ".image." + name_tag ).hide();		
+		$( ".spot" ).not( ".spot." + name_country ).hide();
+		$( ".shop" ).not( ".shop." + name_country ).hide();
+		$( ".image" ).not( ".image." + name_tag ).hide();
+		
 	};
 	
 	var displayForm = function(){
@@ -112,10 +113,13 @@
 		}
 	};
 	
+	var isEmpty = function(selector){
+		if(selector.val() !== ""){
+			$(selector).prev("label").hide();
+		}
+	};
+	
 	$( function () {
-		$(".country-name").each(function(){
-			$(this).addClass($(this).text());
-		});
 		$("#filters").change(filters);
 		$(".add-content, .add-image, .add-video, .add-article").hide();
 		$("#add-spot, #add-shop, #add-article").on("click", displayForm);
@@ -131,6 +135,10 @@
 			 loadMore();
 		} );
 		$("#lightbox a, .the-image a").colorbox();
-		// $("#main-content").on("click", loadMore);		
+		// $("#main-content").on("click", loadMore);
+		isEmpty($("#user_login"));
+		isEmpty($("#user_email"));
+		isEmpty($("#user_signup"));
+		
 	} );
 } )( jQuery );

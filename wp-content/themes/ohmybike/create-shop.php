@@ -14,13 +14,15 @@
 			$_SESSION['emptyTitle'] = "Enter a title please.";
 			$valid = false;
 		}else{
-			$valid = true;
+			$_SESSION['successTitle'] = $title;
+			$valid = true;			
 		}
 		// verify url if set
 		if(!empty($website_url)){
 			if(filter_var($website_url, FILTER_VALIDATE_URL)){
 				$correct_url = $website_url;
-				$valid = true;
+				$_SESSION['successURL'] = $website_url;
+				$valid = true;				
 			}else{
 				$msg.='Enter a valid URL.';
 				$_SESSION['errorURL'] = 'Enter a valid URL.';
@@ -36,16 +38,27 @@
 		if(empty($address)){
 			$_SESSION['emptyAddress'] = "Enter an address please.";
 			$valid = false;
+		}else{
+			$_SESSION['successAddress'] = $address;
+			$valid = true;
 		}
 		// verify country
 		if(empty($country)){
 			$_SESSION['emptyCountry'] = "Enter a country please.";
 			$valid = false;
+		}else{
+			$_SESSION['successCountry'] = $country;
+			$valid = true;
+		}
+		// add tel to session
+		if(!empty($telephone)){
+			$_SESSION['successTelephone'] = $telephone;
 		}
 		// verify mail if set
 		if(!empty($email)){
 			if(filter_var($email, FILTER_VALIDATE_EMAIL)){
 				$shop_email = $email;
+				$_SESSION['successEmail'] = $email;
 				$valid = true;
 			}else{
 				$msg.='Enter a valid email';
@@ -57,14 +70,25 @@
 					exit();
 				}
 			}
+		}
+		// verify tags
+		if(empty($shopTags)){
+			$_SESSION['emptyTags'] = "Add tags to your image.";
+			$valid = false;
+		}else{
+			$valid = true;
 		}		
+		// add desc to session
+		if(!empty($description)){
+			$_SESSION['successDescription'] = $description;
+		}
 		// verify images
-		if(empty($_FILES['images'])){
+		/*if(empty($_FILES['images'])){
 			$_SESSION['emptyFileUpload'] = "Upload an image.";
 			$valid = false;
 		}else{
 			$valid = true;
-		}
+		}*/
 		
 		// send data if verif ok
 		if($valid){
@@ -85,7 +109,7 @@
 			add_post_meta($post_id, 'email', $shop_email);
 			add_post_meta($post_id, 'description', $description);					
 			
-			$uploadedfile = $_FILES['images'];
+			/*$uploadedfile = $_FILES['images'];
 			$upload_overrides = array( 'test_form' => false );
 			$movefile = wp_handle_upload( $uploadedfile, $upload_overrides );
 			
@@ -120,6 +144,7 @@
 
 				wp_update_attachment_metadata( $attach_id, $attach_data );
 			} // if()
+			*/
 			
 		} // endif valid
 		

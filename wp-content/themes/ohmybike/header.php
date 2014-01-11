@@ -23,6 +23,8 @@
 <meta charset="<?php bloginfo( 'charset' ); ?>" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="google-site-verification" content="hvb3loZT5TGOtaMoIkSiaaxG2vNdy3BmXw2whYItZ7A" />
+<meta name="description" content="<?php bloginfo('description'); ?>" />
+<meta name="keywords" content="dirt, bike, quad, motocross, moto, downhill, bmx, mountain bike, trial, vtt" />
 <title><?php wp_title( '|', true, 'right' ); ?></title>
 <link rel="icon" type="image/png" href="<?php echo get_template_directory_uri(); ?>/img/favicon.png" />
 <link type="text/css" rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto+Slab:700" media="all">
@@ -66,7 +68,7 @@
 						<option value="<?php echo bloginfo('url'); ?>/your-new-home">Home</option>
 						<?php endif; ?>
 						
-						<?php if($slug == "learn-with-tips-tricks"): ?>
+						<?php if($slug == "learn-with-tips-and-tricks"): ?>
 						<option value="<?php echo bloginfo('url'); ?>/learn-with-tips-and-tricks" selected="selected">Tips & Tricks</option>
 						<?php else: ?>
 						<option value="<?php echo bloginfo('url'); ?>/learn-with-tips-and-tricks">Tips & Tricks</option>

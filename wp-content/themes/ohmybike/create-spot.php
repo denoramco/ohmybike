@@ -14,12 +14,14 @@
 			$_SESSION['emptyTitle'] = "Enter a title please.";
 			$valid = false;
 		}else{
+			$_SESSION['successTitle'] = $title;
 			$valid = true;
 		}
 		// verify url if set
 		if(!empty($website_url)){
 			if(filter_var($website_url, FILTER_VALIDATE_URL)){
 				$correct_url = $website_url;
+				$_SESSION['successURL'] = $website_url;
 				$valid = true;
 			}else{
 				$msg.='Enter a valid URL.';
@@ -36,16 +38,27 @@
 		if(empty($address)){
 			$_SESSION['emptyAddress'] = "Enter an address please.";
 			$valid = false;
+		}else{
+			$_SESSION['successAddress'] = $address;
+			$valid = true;
 		}
 		// verify country
 		if(empty($country)){
 			$_SESSION['emptyCountry'] = "Enter a country please.";
 			$valid = false;
+		}else{
+			$_SESSION['successCountry'] = $country;
+			$valid = true;
+		}
+		// add tel to session
+		if(!empty($telephone)){
+			$_SESSION['successTelephone'] = $telephone;
 		}
 		// verify mail if set
 		if(!empty($email)){
 			if(filter_var($email, FILTER_VALIDATE_EMAIL)){
 				$shop_email = $email;
+				$_SESSION['successEmail'] = $email;
 				$valid = true;
 			}else{
 				$msg.='Enter a valid email';
@@ -58,8 +71,12 @@
 				}
 			}
 		}
+		// add desc to session
+		if(!empty($description)){
+			$_SESSION['successDescription'] = $description;
+		}
 		
-		// envoi des donnees si verif ok
+		// send data if verif ok
 		if($valid){
 			$post_data = array(
 			  'comment_status' => 'open',
