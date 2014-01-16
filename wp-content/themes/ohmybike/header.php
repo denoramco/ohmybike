@@ -8,7 +8,7 @@
  * @package WordPress
  * @subpackage Twenty_Twelve
  * @since Twenty Twelve 1.0
- */
+ */	
 ?><!DOCTYPE html>
 <!--[if IE 7]>
 <html class="ie ie7" <?php language_attributes(); ?>>
@@ -20,11 +20,11 @@
 <html <?php language_attributes(); ?>>
 <!--<![endif]-->
 <head>
-<meta charset="<?php bloginfo( 'charset' ); ?>" />
+<meta charset="<?php bloginfo( 'charset' ); ?>">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<meta name="google-site-verification" content="hvb3loZT5TGOtaMoIkSiaaxG2vNdy3BmXw2whYItZ7A" />
-<meta name="description" content="<?php bloginfo('description'); ?>" />
-<meta name="keywords" content="dirt, bike, quad, motocross, moto, downhill, bmx, mountain bike, trial, vtt" />
+<meta name="google-site-verification" content="hvb3loZT5TGOtaMoIkSiaaxG2vNdy3BmXw2whYItZ7A">
+<meta name="description" content="<?php bloginfo('description'); ?>">
+<meta name="keywords" content="dirt, bike, quad, motocross, moto, downhill, bmx, mountain bike, trial, vtt">
 <title><?php wp_title( '|', true, 'right' ); ?></title>
 <link rel="icon" type="image/png" href="<?php echo get_template_directory_uri(); ?>/img/favicon.png" />
 <link type="text/css" rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto+Slab:700" media="all">
@@ -38,8 +38,14 @@
 <![endif]-->
 <?php wp_head(); ?>
 </head>
+<?php 
+	if (isset($_POST['pages'])) {
+		 header("Location:" . $_POST['pages']);
+	}
+?>
 <body <?php body_class($class); ?>> 
 	<header id="main-menu">
+		<h1 class="hidden">Oh My Bike</h1>
 		
 		<nav role="navigation">
 			<h2 class="hidden" role="heading" aria-level="2">Main navigation</h2>
@@ -53,7 +59,8 @@
 							'walker' => $walker
 					));
 				?>
-				<form action="" id="mobile-nav">
+				
+				<form action="" method="post" id="mobile-nav">
 					<label for="pages">Select a page : </label>
 					<select name="pages" id="pages">
 						<?php 
@@ -92,6 +99,7 @@
 						<option class="mobile-events" value="<?php echo bloginfo('url'); ?>/all-events">Next events</option>
 						<?php endif; ?>
 					</select>
+					<input type="submit" value="go" id="mobile-nav-submit" />
 				</form>				
 		</nav>
 			<?php

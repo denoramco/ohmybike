@@ -2,6 +2,7 @@
 @vert-fonce : #138a00;
 @orange : #ff9900;
 @orange-fonce : #ff6b00;
+@rouge : #e74c3c;
 @font-face {
   font-family: 'icone';
   src: url('./font/fontello.eot?26007697');
@@ -515,6 +516,7 @@ address span{
 	display : block;	
 }
 .shop .street-address, .spot .street-address{
+	width : 210px;
 	font-size : 13px;
 	height : 34px;
 }
@@ -523,11 +525,65 @@ address span{
 	position : absolute;
 	color : #D9D9D9;
 }
+.shoptag.dirtbike, .shoptag.bmx, .shoptag.quad, .shoptag.motocross, .shoptag.downhill-bike, .shoptag.repair{
+	position : absolute;
+	display : block;
+	width : 30px;
+	height : 30px;	
+	background-image : url(img/shop-icon.png);
+}
+.shoptag{	
+	right : 1px;
+	top : 1px;
+}
+.shoptag+.shoptag{	
+	right : 1px;
+	top : 33px;
+}
+.shoptag+.shoptag+.shoptag{
+	right : 1px;
+	top : 65px;
+}
+.shoptag+.shoptag+.shoptag+.shoptag{
+	right : 32px;
+	top : 1px;
+}
+.shoptag+.shoptag+.shoptag+.shoptag+.shoptag{
+	right : 32px;
+	top : 33px;
+}
+.shoptag+.shoptag+.shoptag+.shoptag+.shoptag+.shoptag{
+	right : 32px;
+	top : 65px;
+}
+.bmx{
+	background-position : 0 180px;
+}
+.quad{
+	background-position : 0 150px;
+}
+.motocross{
+	background-position : 0 120px;
+}
+.dirtbike{
+	background-position : 0 90px;
+}
+.downhill-bike{
+	background-position : 0 60px;
+}
+.repair{
+	background-position : 0 30px;
+}
 /* sticky footer*/
 .warning{
 	text-align : center;
-	font-style : italic;
-	color : #888;
+	font-size : 16px;
+	font-weight : bold;
+	color : #333;
+	background-color : #ffe578;
+	border : 2px solid #f1c40f;
+	margin-bottom : 0;
+	padding : 10px;
 }
 footer{
 	position : relative;
@@ -538,14 +594,13 @@ footer{
 footer p{
 	color : #fff;
 	margin : 0;
-	height : 100%;
-	line-height : 55px;
+	padding : 20px;
 }
 footer a:hover{
 	color : #fff;
 }
 #sub-content{
-	min-height : 1097px;
+	min-height : 1149px;
 	position : relative;
 	overflow : hidden;
 	clear : both;
@@ -558,12 +613,33 @@ footer a:hover{
 #the-post article{
 	display : inline-block;
 }
-#the-post h4{
+#the-post h3{
 	font-size : 22px;
 	margin-top : 0;
 	margin-bottom : 10px;
 }
+.itemcard{
+	padding : 20px;
+	background-color : #f8f8f8;
+	border : 1px solid #d0d0d0;
+	margin-bottom : 10px;
+}
+.itemcard :first-child{
+	margin-top : 0;
+}
+.itemcard :last-child{
+	margin-bottom : 0;
+}
 /* main-menu */
+	/* active hack */
+	.single-images #menu-navigation-principale li:nth-child(1), 
+	.single-videos #menu-navigation-principale li:nth-child(1),
+	.single-post #menu-navigation-principale li:nth-child(2),
+	.single-shops #menu-navigation-principale li:nth-child(3),
+	.single-spots #menu-navigation-principale li:nth-child(4),{
+		border-color : @orange-fonce;
+		background-color : @orange;
+	}
 #main-menu{
 	width : 100%;
 	height : 96px;	
@@ -904,6 +980,7 @@ footer a:hover{
 	top : 300px;
 	left : 320px;
 	z-index : 20;
+	border-left : 2px solid #222;
 }
 #forum-menu ul{
 	margin : 0;
@@ -911,11 +988,11 @@ footer a:hover{
 }
 #forum-menu li{
 	background-color : #333;
-	border-left : 4px solid @vert;
+	border-right : 4px solid @vert;
 }
 #forum-menu .active{
 	background-color : @orange;
-	border-left : 4px solid @orange-fonce;		
+	border-right : 4px solid @orange-fonce;		
 }
 #forum-menu li:hover{
 	background-color : #444;
@@ -1005,7 +1082,7 @@ tr:nth-child(2n){
 	text-shadow: 0px -1px 2px @vert-fonce;
     filter: dropshadow(color=@vert-fonce, offx=0, offy=-1);
 }
-#sidebar .event{
+#sidebar .event, #main-content .event{
 	width : 100%;
 	overflow : hidden;
 	border-bottom : 1px solid #d0d0d0;
@@ -1015,7 +1092,7 @@ tr:nth-child(2n){
 	overflow : hidden;
 	border-bottom : 1px solid #d0d0d0;
 }
-#sidebar .event h3{
+#sidebar .event h3 , #main-content .event h3{
 	width : 70%;
 	margin : 7% 5% 0 0;	
 	float : left;
@@ -1047,14 +1124,14 @@ tr:nth-child(2n){
 	width : 15%;
 	margin : 5%;
 }
-#sidebar .day, #sidebar .month{
+#sidebar .day, #sidebar .month, #main-content .event .day, #main-content .event .month{
 	display : block;
 	text-align : center;
 }
-#sidebar .day{
+#sidebar .day, #main-content .event .day{
 	font-size : 30px;
 }
-#sidebar .month{
+#sidebar .month, #main-content .event .month{
 	font-size : 16px;
 	text-transform : uppercase;
 	font-weight : bold;
@@ -1073,12 +1150,67 @@ tr:nth-child(2n){
 	max-height : 42px;
 	overflow : hidden;
 }
+/* all events */
+#main-content>.event{
+	padding : 20px 0;
+}
+#main-content>.event h2{
+	font-size : 20px;
+	float : none;
+	margin : 0;
+}
+#main-content>.event .date{
+	margin : 14px 20px;
+	float : left;
+	width : 25%;
+}
+#main-content>.event .date p{
+	width : 51%;
+	margin : 0 auto 20px auto;
+}
+#main-content>.event .date p+p{
+	border-top : 1px solid #333;
+	margin : 0 auto;
+	padding-top : 17px;
+}
+#main-content>.event .date .hint{
+	display : block;
+	width : 100%;
+	position : relative;
+	bottom : -20px;
+	text-align : center;
+}
+#main-content>.event .date p+p .hint{
+	bottom : 0;
+	top : -16px;
+}
+#main-content>.event .info{
+	float : left;
+	width : 65%;
+}
+#main-content>.event .content{
+	float : none;
+	margin-top : 20px;
+	font-size : 14px;
+}
+#main-content>.event .place{
+	float : none;
+	font-size : 14px;
+	margin : 0;
+	font-style : italic;
+}
+#main-content>.event .website{
+	float : none;
+	font-size : 14px;
+	margin-top : 10px;
+}
 /* pager */
 .mobile.pager{
 	display : none;
 }
 .pager{
 	margin-top : 20px;
+	overflow : hidden;
 }
 .paginate.previous, .paginate.next{
 	font-family: "Raleway",serif;
@@ -1202,10 +1334,20 @@ tr:nth-child(2n){
 	margin : -4px 0 0;
 	overflow : hidden;
 }
+.image a, .video a{
+	display : block;
+}
 .image a:hover, .video a:hover{
 	border : none;
 }
-#the-image{
+.the-image{
+	overflow : hidden;
+	margin-bottom : 10px;
+}
+.the-video{
+	margin-bottom : 10px;
+}
+#the-image{	
 	cursor:url(img/cursor.png), -moz-zoom-in;
 }
 .play{
@@ -1271,7 +1413,7 @@ tr:nth-child(2n){
 	display : inline-block;
 	width : 260px;
 	padding : 20px;
-	background-color : #efefef;
+	background-color : #f8f8f8;
 	border-bottom : 1px solid #d0d0d0;
 	overflow : hidden;
 	position : relative;
@@ -1414,11 +1556,16 @@ tr:nth-child(2n){
 .add-content fieldset{
 	float : left;
 }
-.add-content label{
+.add-content label:not(.taglabel){
 	display : block;
 	width : 350px;
 	margin-top : 10px;
 	margin-left : 20px;
+}
+.add-content .taglabel{
+	display : inline-block;
+	width : 180px;
+	margin-top : 10px;
 }
 .add-image label, .add-video label, .add-article label{
 	display : block;
@@ -1426,7 +1573,7 @@ tr:nth-child(2n){
 	margin-top : 10px;
 	margin-left : 20px;
 }
-.add-content input{
+.add-content input:not(.taginput){
 	width : 350px;
 	height : 26px;
 	margin-top : 10px;
@@ -1436,6 +1583,9 @@ tr:nth-child(2n){
 	-moz-box-sizing: border-box;
 	-webkit-box-sizing: border-box;
 	box-sizing: border-box;
+}
+.add-content .taginput{
+	width : 53px;
 }
 .add-content select{
 	width : 350px;
@@ -1518,16 +1668,15 @@ input:focus, select:focus, textarea:focus{
 	outline : 1px solid #f90;
 }
 .required{
-	color : #c0392b;
+	color : @rouge;
 }
-input.error{
-	border : 1px solid #c0392b;
+.add-content input.error{
+	border : 2px solid @rouge;
 }
-p.error{	
-	margin-top : 0;
-	margin-left : 20px;
+.add-content p.error{	
+	margin : 0 0 0 20px;
 	padding : 10px;
-	background-color : #c0392b;
+	background-color : @rouge;
 	color : #fff;
 }
 .content-menu.forum.unconnected{
@@ -1822,23 +1971,40 @@ p.error{
 	margin-right : 20px;
 	padding-bottom : 20px;
 }
-#tags h3, #lightbox h3{
+#lightbox a{
+	display : block;
+	float : left;
+	margin-bottom : 16px;
+}
+#lightbox a:nth-child(2n+1){
+	margin-left : 20px;
+}
+#tags h4, #lightbox h4{
+	font-size : 18px;
 	text-transform : uppercase;	
 }
-#tags h4{
+#tags h5{
+	font-size : 16px;
 	color: #fff;
 	background-color: #333;
 	height : 34px;
 	line-height : 34px;
 	padding-left : 14px;	
-	margin-bottom : 0;
+	margin-bottom : 10px;
 }
-#tags h4:first-letter{
+#tags h6{
+	font-size : 14px;
+	margin : 5px 0;
+}
+#tags h5:first-letter{
 	text-transform : uppercase;
 }
 #tags section{
 	width : 300px;
 	float : left;
+}
+#tags div{	
+	margin-bottom : 5px;
 }
 #tags section:nth-child(2n+1){
 	margin-left : 40px;
@@ -1871,6 +2037,9 @@ p.error{
 	}
 	#tags section:nth-child(2n+1){
 		margin-left : 0;
+	}
+	#lightbox a:nth-child(2n+1) {
+		margin-left: 0;
 	}
 }
 @media only screen and (max-width: 1599px){
@@ -1946,6 +2115,9 @@ p.error{
 	#tags section:nth-child(2n+1){
 		margin-left : 20px;
 	}
+	#lightbox a:nth-child(2n+1) {
+		margin-left: 20px;
+	}
 }
 @media only screen and (max-width: 1024px){
 	#main-content .banner{
@@ -1986,6 +2158,9 @@ p.error{
 		top : -70px; 
 		left : 178px;
 		position : relative;
+	}
+	.category #forum-menu.connected{
+		left : 295px;
 	}	
 	.content-menu.forum li{
 		left : 0;
@@ -2008,7 +2183,10 @@ p.error{
 	}
 	.content-menu.forum li{
 		left : 0;
-	}	
+	}
+	.add-content .taglabel{
+		width : 283px
+	}
 }
 @media only screen and (max-width: 898px){
 	.gallery, #gallery {
@@ -2041,6 +2219,47 @@ p.error{
 	.add-article{
 		width : 500px;
 	}
+	#the-post{
+		width : 100%;
+	}
+	#the-post article, #lightbox{
+		width : 100%;
+		-webkit-box-sizing: border-box;
+		-moz-box-sizing: border-box;
+		box-sizing: border-box; 
+	}
+	#lightbox a:nth-child(2n+1){
+		margin-left : 0;
+	}
+	#gmap{
+		width : 100%;
+	}
+	.category #forum-menu.connected{
+		width : 100%;
+		left : 0;
+	}
+	.category #mobile-forum-menu.connected{
+		display : block;
+		border-left : none;
+		border-right : none;
+		margin : 0 auto;
+		border-top : 1px solid #222;
+		top : 0;
+		left : -2px;
+		width : 100%;
+		padding-left : 0;
+	}
+	.category #mobile-forum-menu.connected div{
+		text-align : center;
+	}
+	.category .content-menu.forum.connected{
+		height : 136px;
+	}
+	.category .content-menu.forum.connected ul{
+		display : block;
+		margin : 0 auto;
+		width : 297px;
+	}
 }
 @media only screen and (max-width: 820px){
 	/* connected */
@@ -2068,7 +2287,7 @@ p.error{
 	}
 	.content-menu.home.connected .filters div{
 		margin : 0 auto;
-		width : 193px;
+		width : 212px;
 	}
 	.add-image, .add-video{
 		width : 100%;
@@ -2089,7 +2308,7 @@ p.error{
 		width : 100%;
 	}
 	.content-menu.home.unconnected .filters div{
-		width : 193px;
+		width : 212px;
 		margin : 0 auto;
 	}
 	.content-menu.shops.unconnected .filters div, .content-menu.spots.unconnected .filters div{
@@ -2115,9 +2334,12 @@ p.error{
 		padding-right : 0;
 	}
 	/* connected */	
+	.category .content-menu.forum.connected ul{
+		width : 287px;
+	}
 	.content-menu.forum.connected ul{
 		margin : 0 auto;
-		width : 162px;
+		width : 168px;
 		display : block;
 	}
 	.content-menu.home.connected, 
@@ -2134,8 +2356,10 @@ p.error{
 		border-right : none;
 		margin : 0 auto;
 		border-top : 1px solid #222;
-		top : -1px;
+		top : 0;
+		left : -2px;
 		width : 100%;
+		padding-left : 0;
 	}	
 	#mobile-forum-menu.connected div, .content-menu.home div{
 		width : 284px;
@@ -2154,6 +2378,40 @@ p.error{
 	}
 	#main-content header h2{
 		font-size : 24px;
+	}
+	/* all events */
+	#main-content>.event{
+		padding-top : 0;
+	}
+	#main-content>.event .date{
+		float : none;
+		width : 100%;
+		overflow : hidden;
+		margin : 20px 0;
+	}
+	#main-content>.event .date p{
+		width : 49%;
+		float : left;
+	}
+	#main-content>.event .date p+p{
+		border : none;
+		border-left : 1px solid #333;
+		padding : 0;
+		margin-bottom : 20px;
+	}
+	#main-content>.event .date .hint{
+		display : none;
+	}
+	#main-content>.event .info {
+		float : none;
+		width : 100%;
+	}
+	#main-content>.event h2,
+	#main-content>.event .place,
+	#main-content>.event .content,
+	#main-content>.event .website{
+		padding-left : 20px;
+		padding-right : 20px;
 	}
 }	
 @media only screen and (max-width: 724px){
@@ -2368,6 +2626,9 @@ p.error{
 		top : 0;
 		left : 0;
 	}
+	.category #forum-menu.connected{
+		top : -70px;
+	}
 	#mobile-forum-menu.connected{
 		top : -70px;
 		border-right : 1px solid #222;		
@@ -2379,13 +2640,10 @@ p.error{
 	#main-content header h1{
 		padding-top : 50px;
 	}
-	footer{		
-		padding : 10px 0;
-	}
 	footer p{
-		line-height : 30px;
+		padding : 15px;
 	}
-	#add-video,  #add-image, #add-shop, #add-spot, #add-article, #back{
+	#add-video,  #add-image, #add-shop, #add-spot, #add-article{
 		padding : 20px;
 	}
 }
@@ -2417,11 +2675,8 @@ p.error{
 	}
 }
 @media only screen and (max-width: 468px){
-	footer {
-		padding : 12px 0;
-	}
 	footer p{
-		line-height : 16px;
+		padding : 12px;
 	}
 }
 @media only screen and (max-width: 382px){

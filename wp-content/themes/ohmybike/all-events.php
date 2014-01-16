@@ -38,9 +38,12 @@ get_header(); ?>
 		while ( $loop->have_posts() ) : $loop->the_post(); 
 		
 			$events[$i]['date']= get_field('date');
+			$events[$i]['end-date']= get_field('end_date');
 			$events[$i]['name']= get_the_title();
 			$events[$i]['place']= get_field('place');
 			$events[$i]['url']= get_field('website_url');	
+			$events[$i]['description'] = get_field('description');
+			$events[$i]['permalink']= get_permalink();
 			
 			$i++;		
 		
@@ -49,28 +52,58 @@ get_header(); ?>
 		usort($events, 'date_compare');			
 		
 		foreach($events as  $event): ?>
-		<div class="event">
-			<p class="date">
-				<span class="day">
-				<?php 
-					$event_source = $event['date'];
-					$event_date = new DateTime($event_source);
-					echo $event_date->format('d');
-				?>
-				</span>
-				<span class="month">
-				<?php 
-					echo $event_date->format('M');
-				?>
-				</span>
-			</p>
-			<h2>				
-				<?php echo $event['name'] ?>
-			</h2>
-			<p class="place"><?php echo $event['place']; ?></p>
-			<?php if($event['url']): ?>
-				<a href="<?php echo $event['url']; ?>" title="external link" target="_blank">More details on the event website</a>
-			<?php endif; ?>
+		<div class="event" itemscope itemtype="http://schema.org/Event">
+			<div class="date">
+				<p itemprop="startDate">
+					<span class="day">
+					<?php 
+						$start_source = $event['date'];
+						$event_start = new DateTime($start_source);
+						echo $event_start->format('d');
+					?>
+					</span>
+					<span class="month">
+					<?php 
+						echo $event_start->format('F');
+					?>
+					</span>
+					<span class="hint">Start date</span>
+				</p>
+				
+				<p itemprop="endDate">
+					<span class="hint">End date</span>
+					<span class="day">
+					<?php 
+						$end_source = $event['end-date'];
+						$event_end = new DateTime($end_source);
+						echo $event_end->format('d');
+					?>
+					</span>
+					<span class="month">
+					<?php 
+						echo $event_end->format('F');
+					?>
+					</span>
+				</p>
+			</div>
+			<div class="info">
+				<h2 role="heading" aria-level="2" itemprop="name">	
+					<a href="<?php echo $event['permalink']; ?>">
+						<?php echo $event['name'] ?>
+					</a>
+				</h2>
+				<p class="place" itemprop="location"><?php echo $event['place']; ?></p>
+				<p class="content">
+					<?php echo $event['description']; ?>
+				</p>			
+				<?php if($event['url']): ?>
+					<p class="website">
+						<a href="<?php echo $event['url']; ?>" title="external link" target="_blank">
+							More details on the event website
+						</a>
+					</p>
+				<?php endif; ?>
+			</div>
 		</div>
 		<?php endforeach;?>
 <?php get_footer(); ?>

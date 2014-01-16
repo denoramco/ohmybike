@@ -44,6 +44,12 @@
 		$successEmail = $_SESSION['successEmail'];
 		$successTelephone = $_SESSION['successTelephone'];
 		$successDescription = $_SESSION['successDescription'];
+		$successBmx = $_SESSION['successBmx'];
+		$successQuad = $_SESSION['successQuad'];
+		$successMoto = $_SESSION['successMoto'];
+		$successDirt = $_SESSION['successDirt'];
+		$successDh = $_SESSION['successDh'];
+		$successRepair = $_SESSION['successRepair'];
 		
 		session_destroy();		
 	?>	
@@ -127,15 +133,23 @@
 				<?php endif; ?>
 			</fieldset>
 			<fieldset>
-					<label for="shopTags">This shop sells or repairs :<span class="required">*</span></label>
+					<label>This shop sells or repairs : <span class="required">*</span></label>
 					<?php if(isset($erreurTags)): ?>
-						<input id="shopTags" class="error" name="shopTags" type="text" required />
 						<p class="error"><?php echo $erreurTags; ?></p>
-					<?php else: ?>
-						<input type="checkbox" name="shopTags" value="bmx">BMX<br>
-						<input type="checkbox" name="shopTags" value="Car">I have a car 
-						<input id="shopTags" name="shopTags" type="text" required />
 					<?php endif; ?>
+						<input type="checkbox" name="bmxTag" id="bmxTag" value="BMX" class="taginput" <?php if($successBmx){echo 'checked="checked"';}; ?>>
+					<label for="bmxTag" class="taglabel">BMX</label>
+						<input type="checkbox" name="quadTag" id="quadTag" value="Quad" class="taginput" <?php if($successQuad){echo 'checked="checked"';}; ?>>
+					<label for="quadTag" class="taglabel">Quad</label>
+						<input type="checkbox" name="motoTag" id="motoTag" value="Motocross" class="taginput" <?php if($successMoto){echo 'checked="checked"';}; ?>>
+					<label for="motoTag" class="taglabel">Motocross</label>
+						<input type="checkbox" name="dirtTag" id="dirtTag" value="Dirtbike" class="taginput" <?php if($successDirt){echo 'checked="checked"';}; ?>>
+					<label for="dirtTag" class="taglabel">Dirtbike</label>
+						<input type="checkbox" name="dhTag" id="dhTag" value="Downhill Bike" class="taginput" <?php if($successDh){echo 'checked="checked"';}; ?>>
+					<label for="dhTag" class="taglabel">Downhill Bike</label>
+						<input type="checkbox" name="repairTag" id="repairTag" value="Repair" class="taginput" <?php if($successRepair){echo 'checked="checked"';}; ?>>
+					<label for="repairTag" class="taglabel">Repair</label>
+						
 				</fieldset>
 			<fieldset>
 				<label for="description">Description</label>
@@ -158,14 +172,14 @@
 	<article class="shop item vcard all <?php echo get_field('country'); ?>">
 		<?php
 			$titre = get_the_title();
-			if(strlen($titre) > 19){
+			if(strlen($titre) > 16){
 				$result = substr($titre, 0, 16);
 				$result .= "...";
 			}else{
 				$result = $titre;
 			}
 		?>
-		<h2 class="fn org"><a href="<?php echo the_permalink(); ?>"><?php echo $result; ?></a></h2>
+		<h2 class="fn org"><a href="<?php echo the_permalink(); ?>"><?php echo str_replace('\' ', '\'', ucwords(str_replace('\'', '\' ', strtolower($result)))); ?></a></h2>
 		
 		<address class="adr-link adr <?php echo get_field('country'); ?>">
 		<?php if(get_field('street_address')): ?>
@@ -178,6 +192,16 @@
 
 		<p class="like-count"><?php if( function_exists('zilla_likes') ) zilla_likes(); ?></p>
 		<p class="comment-count"><a href="<?php echo the_permalink(); ?>#respond"><span class="icon-comment"></span>&nbsp;<?php comments_number(__('0', 'omb'), __('1', 'omb'), __('%', 'omb')); ?></a></p>
+		<?php 
+			$tags = get_the_tags(); 
+			if($tags):
+				foreach($tags as $tag):
+			?>
+			<span class="shoptag <?php echo $tag->slug; ?>" title="<?php echo $tag->name; ?>"></span>
+			<?php
+				endforeach;			
+			endif;			
+		?>
 	</article>
 	<?php endwhile; ?>	
 </div>

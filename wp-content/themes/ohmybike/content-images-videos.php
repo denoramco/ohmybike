@@ -20,8 +20,8 @@
 	if($src):
 ?>	
 	<div class="image item all <?php $tags = get_the_tags(); if($tags){foreach($tags as $tag){	echo $tag->slug . ' ';	}};?>">
-		<a href="<?php echo the_permalink(); ?> ">		
-			<img src="<?php echo $src['sizes']['thumbnail']; ?>" alt="<?php echo get_the_title(); ?>" title="<?php echo get_the_title(); ?>" width="300" height="200" />
+		<a href="<?php echo the_permalink(); ?> " title="See it in bigger size">		
+			<img src="<?php echo $src['sizes']['thumbnail']; ?>" alt="<?php echo get_the_title(); ?>" width="300" height="200" />
 		</a>
 		<p>
 			<span class="title"><?php echo $result; ?></span>
@@ -30,7 +30,7 @@
 	</div>
 <?php else: ?>
 	<div class="video item">
-		<a href="<?php echo the_permalink(); ?> " class="play">
+		<a href="<?php echo the_permalink(); ?> " title="Go to the video" class="play">
 			<?php 
 				$video_thumbnail_src = get_video_thumbnail(); 
 				$new_thumbnail = str_replace('.jpg' , '-300x200.jpg' , $video_thumbnail_src);

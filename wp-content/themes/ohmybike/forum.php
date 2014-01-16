@@ -65,7 +65,7 @@ get_header(); ?>
 				</fieldset>
 				<fieldset>
 					<label for="content">Content<span class="required">*</span></label>
-					<p class="advice">Don't forget to close tags. If you are not familiar with tags, just click on a button then write your text and click again on the same button.</p>
+					<p class="advice">If you are not familiar with tags, select your text then click on the button you need. You must add tags to video link.</p>
 					<?php if(isset($erreurContent)): ?>
 						<?php 
 							$editor_settings = array(
@@ -165,16 +165,6 @@ get_header(); ?>
 		</table>
 		<?php if( $loop->max_num_pages > 1 ):?>
 			<nav class="pager">
-				<?php
-					$big = 999999999; // need an unlikely integer
-
-					echo paginate_links( array(
-						'base' => str_replace( $big, '%#%', esc_url( get_pagenum_link( $big ) ) ),
-						'format' => '?paged=%#%',
-						'current' => max( 1, get_query_var('paged') ),
-						'total' => $loop->max_num_pages
-					) );
-					?>
 				<?php
 					$path = $_SERVER['REQUEST_URI'];
 					preg_match_all('!\d+!', $path, $npage); // return array with end of url path, 2 levels of array npage[0][0] to get real npage

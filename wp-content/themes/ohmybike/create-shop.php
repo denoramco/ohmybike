@@ -7,7 +7,7 @@
 
 		extract($_POST);
 		$is_ajax = isset($_SERVER['HTTP_X_REQUESTED_WITH']) ? true : false;
-		$msg = '';	
+		$msg = '';
 		
 		// verify title
 		if(empty($title)){
@@ -72,10 +72,35 @@
 			}
 		}
 		// verify tags
-		if(empty($shopTags)){
-			$_SESSION['emptyTags'] = "Add tags to your image.";
+		if(empty($bmxTag) && empty($quadTag) && empty($motoTag) && empty($dirtTag) && empty($dhTag) && empty($repairTag)){
+			$_SESSION['emptyTags'] = "Add at least one category to your shop.";
 			$valid = false;
-		}else{
+		}else{			
+			$shopTags = '';
+			if(!empty($bmxTag)){
+				$shopTags .= $bmxTag . ',';
+				$_SESSION['successBmx'] = true;
+			}
+			if(!empty($quadTag)){
+				$shopTags .= $quadTag . ',';
+				$_SESSION['successQuad'] = true;
+			}
+			if(!empty($motoTag)){
+				$shopTags .= $motoTag . ',';
+				$_SESSION['successMoto'] = true;
+			}
+			if(!empty($dirtTag)){
+				$shopTags .= $dirtTag . ',';
+				$_SESSION['successDirt'] = true;
+			}
+			if(!empty($dhTag)){
+				$shopTags .= $dhTag . ',';
+				$_SESSION['successDh'] = true;
+			}
+			if(!empty($repairTag)){
+				$shopTags .= $repairTag;
+				$_SESSION['successRepair'] = true;
+			}
 			$valid = true;
 		}		
 		// add desc to session
@@ -102,12 +127,14 @@
 			
 			$post_id = wp_insert_post( $post_data );
 			
+			wp_set_post_tags( $post_id, $shopTags ); // set tags to post
+			
 			add_post_meta($post_id, 'website_url', $correct_url);
 			add_post_meta($post_id, 'street_address', $address);
 			add_post_meta($post_id, 'country', $country);
 			add_post_meta($post_id, 'telephone', $telephone);
 			add_post_meta($post_id, 'email', $shop_email);
-			add_post_meta($post_id, 'description', $description);					
+			add_post_meta($post_id, 'description', $description);		
 			
 			/*$uploadedfile = $_FILES['images'];
 			$upload_overrides = array( 'test_form' => false );

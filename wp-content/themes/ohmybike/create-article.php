@@ -41,7 +41,7 @@
 			  'post_title'     => $title,	
 			  'post_content'   => $content
 			);
-			$categories[] = $category;
+			$categories = array($category);
 			$post_id = wp_insert_post( $post_data );			
 			wp_set_post_categories( $post_id, $categories );
 			wp_set_post_tags( $post_id, $postTags ); // set tags to post

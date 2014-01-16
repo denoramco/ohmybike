@@ -187,6 +187,16 @@ function twentytwelve_scripts_styles() {
 	 */
 	wp_enqueue_style( 'twentytwelve-ie', get_template_directory_uri() . '/css/ie.css', array( 'twentytwelve-style' ), '20121010' );
 	$wp_styles->add_data( 'twentytwelve-ie', 'conditional', 'lt IE 9' );
+
+	
+	// Add my main script
+	wp_register_script('script',get_template_directory_uri().'/js/script.js',array('jquery'),false,true);
+	//Localize Scripts
+	$php_array = array( 'admin_ajax' => admin_url( 'admin-ajax.php' ) );
+	wp_localize_script( 'script', 'php_array', $php_array );
+
+	wp_enqueue_script('script');
+	
 }
 add_action( 'wp_enqueue_scripts', 'twentytwelve_scripts_styles' );
 
@@ -567,34 +577,5 @@ add_filter('quicktags_settings', '_remove_quicktags', 10, 1);
 endif;
 
 
-// Add buttons to editor
-add_action('print_footer_scripts','omb_add_quicktags');
-function omb_add_quicktags() {
-	if (wp_script_is('quicktags')){
-?>
-	<script type="text/javascript" charset="utf-8">
-	/* Adding Quicktag buttons to the editor Wordpress ver. 3.3 and above
-	* - Button HTML ID (required)
-	* - Button display, value="" attribute (required)
-	* - Opening Tag (required)
-	* - Closing Tag (required)
-	* - Access key, accesskey="" attribute for the button (optional)
-	* - Title, title="" attribute (optional)
-	* - Priority/position on bar, 1-9 = first, 11-19 = second, 21-29 = third, etc. (optional)
-	*/
-	QTags.addButton( 'eg_title', 'title', '<h5>', '</h5>' );
-	QTags.addButton( 'eg_strong', 'bold', '<strong>', '</strong>' );
-	QTags.addButton( 'eg_paragraph', 'paragraph', '<p>', '</p>' );
-	QTags.addButton( 'eg_italic', 'Italic', '<i>', '</i>' );
-	QTags.addButton( 'eg_blockquote', 'blockquote', '<blockquote>', '</blockquote>' );
-	QTags.addButton( 'eg_youtube', 'youtube', '[youtube]', '[/youtube]' );
-	QTags.addButton( 'eg_dailymotion', 'dailymotion', '[dailymotion]', '[/dailymotion]' );
-	QTags.addButton( 'eg_vimeo', 'vimeo', '[vimeo]', '[/vimeo]' );
-	</script>
-<?php
-	 }
-}
-add_action('print_footer_scripts','omb_add_quicktags');
 
 add_filter ( 'user_can_richedit' , create_function ( '$a' , 'return false;' ) , 50 );
-

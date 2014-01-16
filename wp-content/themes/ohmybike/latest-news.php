@@ -38,7 +38,7 @@
 			<p class="extra">
 				<span class="icon-clock hour"> <?php echo $news_date->format('H:i'); ?></span>
 				<span>by</span>
-				<span class="news-author"><?php echo get_the_author_meta( 'user_login' , $latest_post['post_author'] ); ?></span>
+				<span class="news-author"><?php echo get_the_author_meta( 'display_name' , $latest_post['post_author'] ); ?></span>
 			<p>	
 		</div>
 	<?php endforeach; ?>

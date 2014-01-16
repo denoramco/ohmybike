@@ -22,7 +22,10 @@ get_header(); ?>
 	<header class="banner" role="banner">
 		<p  id="logo"><a href="<?php echo bloginfo('url'); ?>" title="home" alt="home">home</a></p>
 		<h1 role="heading" aria-level="1">Learn with tips & tricks</h1>
-		<h2 role="heading" aria-level="2"><?php echo get_category(get_query_var('cat'))->name; ?></h2>
+		<?php 
+			$cat_id = get_query_var('cat');
+		?>
+		<h2 role="heading" aria-level="2"><?php echo get_category($cat_id)->name; ?></h2>
 	</header>
 	<div class="content-menu forum <?php if ( is_user_logged_in() ){echo 'connected';}else{echo 'unconnected';}; ?>">
 		<?php if ( is_user_logged_in() ):
@@ -31,7 +34,7 @@ get_header(); ?>
 			session_destroy();
 		?>
 			<ul>
-				<li><button id="add-article" class="off">Add new article</button></li>
+				<li><button id="add-article" class="off">Add new <?php echo get_category($cat_id)->name; ?> article</button></li>
 			</ul>
 			<form method="post" action="<?php echo get_template_directory_uri(); ?>/create-article.php" class="add-article">
 				<fieldset>
@@ -42,16 +45,7 @@ get_header(); ?>
 					<?php else: ?>		
 						<input id="title" name="title" type="text" required />
 					<?php endif; ?>
-				</fieldset>
-				<fieldset>
-					<label for="category">Category</label>
-					<select name="category" id="category" disabled>
-						<?php 
-							$cat_id = get_query_var('cat');
-						?>
-						<option value="<?php echo $cat_id;  ?>"><?php echo   get_category($cat_id)->name; ?></option>
-					</select>
-				</fieldset>
+				</fieldset>	
 				<fieldset>
 					<label for="postTags">Post Tag</label>
 					<select name="postTags" id="postTags">
@@ -61,7 +55,7 @@ get_header(); ?>
 				</fieldset>
 				<fieldset>
 					<label for="content">Content<span class="required">*</span></label>
-					<p class="advice">Don't forget to close tags. If you are not familiar with tags, just click on a button then write your text and click again on the same button.</p>
+					<p class="advice">If you are not familiar with tags, select your text then click on the button you need. You must add tags to video link.</p>
 					<?php if(isset($erreurContent)): ?>
 						<?php 
 							$editor_settings = array(
@@ -83,6 +77,7 @@ get_header(); ?>
 						?>
 					<?php endif; ?>
 				</fieldset>
+				<input type="hidden" value="<?php echo $cat_id;  ?>" name="category" />
 				<button class="button" type="submit" name="submit">Post</button>
 			</form>		
 		<?php endif; ?>
@@ -135,7 +130,7 @@ get_header(); ?>
 			<tbody>			
 				<?php
 					$paged = (get_query_var('paged')) ? get_query_var('paged') : 1;			
-					$loop = new WP_Query( array( 'post_type' => 'post' , 'cat' => $current_category , 'paged' => $paged, 'posts_per_page' => 2 ) );
+					$loop = new WP_Query( array( 'post_type' => 'post' , 'cat' => $current_category , 'paged' => $paged, 'posts_per_page' => 14 ) );
 										
 					while ( $loop->have_posts() ) : $loop->the_post(); 
 					$postTags = get_the_tags();
@@ -168,16 +163,6 @@ get_header(); ?>
 		</table>
 		<?php if( $loop->max_num_pages > 1 ):?>
 			<nav class="pager">
-				<?php
-					$big = 999999999; // need an unlikely integer
-
-					echo paginate_links( array(
-						'base' => str_replace( $big, '%#%', esc_url( get_pagenum_link( $big ) ) ),
-						'format' => '?paged=%#%',
-						'current' => max( 1, get_query_var('paged') ),
-						'total' => $loop->max_num_pages
-					) );
-					?>
 				<?php				
 					$path = $_SERVER['REQUEST_URI'];
 					preg_match_all('!\d+!', $path, $npage);

@@ -17,13 +17,13 @@
 			$events[$i]['date']= get_field('date');
 			$events[$i]['name']= get_the_title();
 			$events[$i]['place']= get_field('place');
-			$events[$i]['url']= get_field('website_url');	
+			$events[$i]['permalink']= get_permalink();
 			
 			$i++;		
 		
 		endwhile; 	
 		
-		usort($events, 'date_compare');			
+		usort($events, 'date_compare');	
 		
 		foreach($events as  $event): ?>
 		<?php if($j < 4): ?>
@@ -42,14 +42,12 @@
 				?>
 				</span>
 			</p>
-			<h3 role="heading" aria-level="3" itemprop="name">				
+			<h3 role="heading" aria-level="3" itemprop="name">	
+				<a href="<?php echo $event['permalink']; ?>">
 				<?php echo $event['name']; ?>
+				</a>
 			</h3>
 			<p class="place" itemprop="location"><?php echo $event['place']; ?></p>
-			<!--<?php if($event['url']): ?>
-				<a href="<?php echo $event['url']; ?>" title="Buy a ticket for that event">»Tickets«</a>
-			<?php endif; ?>
-			-->
 		</div>
 		<?php $j++; endif; ?>
 		<?php endforeach;?>
